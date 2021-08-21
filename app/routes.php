@@ -10,4 +10,7 @@ return function (App $app) {
         // CORS Pre-Flight OPTIONS Request Handler
         return $response;
     });
+
+    // code-gen space
+
 };

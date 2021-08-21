@@ -20,13 +20,9 @@ return function (ContainerBuilder $containerBuilder) {
                     'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
                     'level' => Logger::DEBUG,
                 ],
-                'db' => [
-                    'driver' => 'mysql',
-                    'host' => 'localhost',
-                    'database' => 'slim_test',
-                    'username' => 'root',
-                    'password' => ''
-                ]
+
+                // code-gen space
+
             ]);
         }
     ]);
