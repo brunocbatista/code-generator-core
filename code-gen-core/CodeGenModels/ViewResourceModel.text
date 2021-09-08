@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Application\Actions\//CamelClassName;
+
+use App\Application\Exceptions\//CamelClassName\//CamelClassNameNotFoundException;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class View//CamelClassNameAction extends TaskAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws //CamelClassNameNotFoundException
+     */
+    protected function action(): Response
+    {
+        $resourceId = (int) $this->resolveArg('id');
+        $resource = $this->//OriginalClassNameRepository->find//CamelClassNameOfId($resourceId);
+
+        if (!$resource) {
+            throw new //CamelClassNameNotFoundException();
+        }
+
+        $this->logger->info("//CamelClassName of id $resourceId was viewed.");
+
+        return $this->respondWithData($resource);
+    }
+}

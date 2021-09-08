@@ -1,0 +1,20 @@
+<?php
+
+namespace App\Application\Actions\//CamelClassName;
+
+use Psr\Http\Message\ResponseInterface as Response;
+
+class List//CamelClassNameAction extends //CamelClassNameAction
+{
+    /**
+     * {@inheritdoc}
+     */
+    protected function action(): Response
+    {
+        $list = $this->//OriginalClassNameRepository->findAll();
+
+        $this->logger->info("//CamelClassName list was viewed.");
+
+        return $this->respondWithData($list);
+    }
+}

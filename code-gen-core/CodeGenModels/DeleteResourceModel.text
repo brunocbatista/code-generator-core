@@ -1,0 +1,28 @@
+<?php
+
+namespace App\Application\Actions\//CamelClassName;
+
+use App\Application\Exceptions\InternalServerException;
+use App\Domain\//CamelClassName\//CamelClassName;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class Delete//CamelClassNameAction extends //CamelClassNameAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws InternalServerException
+     */
+    protected function action(): Response
+    {
+        $registerId = (int) $this->resolveArg('id');
+
+        $success = $this->//OriginalClassNameRepository->delete($taskId);
+        if (!$success) {
+            throw new InternalServerException();
+        }
+
+        $this->logger->info("//OriginalClassName of id $registerId was deleted.");
+
+        return $this->respondWithData(['success' => true]);
+    }
+}

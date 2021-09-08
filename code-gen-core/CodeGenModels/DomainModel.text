@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Domain\//ClassName;
+
+use JsonSerializable;
+
+class //ClassName implements JsonSerializable {
+//AttributesDefinition
+
+    /**
+     //ParamsDocumentation
+     */
+    public function __construct(//ParamsToConstructor)
+    {
+        //SetAttributesToConstructor
+    }
+
+//GettersAndSetters
+
+    /**
+     * @return array
+     */
+    public function jsonSerialize()
+    {
+        return [
+            //JsonSerializeArray
+        ];
+    }
+}

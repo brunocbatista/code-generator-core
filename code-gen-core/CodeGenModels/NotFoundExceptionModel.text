@@ -1,0 +1,11 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Application\Exceptions\//CamelClassName;
+
+use App\Application\Exceptions\RecordNotFoundException;
+
+class //CamelClassNameNotFoundException extends RecordNotFoundException
+{
+    public $message = 'The //OriginalClassName you requested does not exist.';
+}

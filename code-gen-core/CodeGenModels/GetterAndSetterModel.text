@@ -1,0 +1,16 @@
+    /**
+     * @return //Type
+     */
+    public function get//CamelAttribute(): //Type
+    {
+        return $this->//OriginalAttribute;
+    }
+
+    /**
+     * @param //Type $//OriginalAttribute
+     * @void
+     */
+    public function set//CamelAttribute(//Type $//OriginalAttribute): void
+    {
+        $this->//OriginalAttribute = $//OriginalAttribute;
+    }

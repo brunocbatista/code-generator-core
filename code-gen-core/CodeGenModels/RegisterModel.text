@@ -1,0 +1,44 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Application\Actions\Auth;
+
+use App\Application\Exceptions\InternalServerException;
+use App\Application\Exceptions\Register\EmailUniqueValidateException;
+use App\Domain\User\User;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class RegisterUserAction extends AuthAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws EmailUniqueValidateException
+     * @throws InternalServerException
+     */
+    protected function action(): Response
+    {
+        $userRegisterData = $this->getFormData();
+        $user = $this->userRepository->findUserOfEmailToAuth($userRegisterData->email);
+        if (!empty($user)) {
+            throw new EmailUniqueValidateException();
+        }
+
+        $userRegisterData->password = password_hash($userRegisterData->password, PASSWORD_BCRYPT);
+        $user = new User($userRegisterData->name, $userRegisterData->email, $userRegisterData->password);
+        $userId = $this->userRepository->save($user);
+        if (!$userId) {
+            throw new InternalServerException();
+        }
+        $user->setId($userId);
+
+        $token = $this->authTokenService->generate($user);
+        $success = $this->authTokenRepository->save($token);
+        if (!$success) {
+            throw new InternalServerException();
+        }
+
+        $this->logger->info("User of email" . $userRegisterData->email . "was authenticated.");
+
+        return $this->respondWithData(['user' => $user, 'token' => $token->getToken()]);
+    }
+}

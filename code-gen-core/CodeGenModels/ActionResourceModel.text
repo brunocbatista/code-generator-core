@@ -1,0 +1,28 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Application\Actions\//CamelClassName;
+
+use App\Application\Actions\Action;
+use App\Domain\//CamelClassName\//CamelClassNameRepository;
+use Psr\Log\LoggerInterface;
+
+abstract class //CamelClassNameAction extends Action
+{
+    /**
+     * @var //CamelClassNameRepository
+     */
+    protected $//OriginalClassNameRepository;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param //CamelClassNameRepository $//OriginalClassNameRepository
+     */
+    public function __construct(LoggerInterface $logger,
+                                //CamelClassNameRepository $//OriginalClassNameRepository
+    )
+    {
+        parent::__construct($logger);
+        $this->//OriginalClassNameRepository = $//OriginalClassNameRepository;
+    }
+}

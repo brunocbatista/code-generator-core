@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Application\Actions\//CamelClassName;
+
+use App\Application\Exceptions\InternalServerException;
+use App\Domain\//CamelClassName\//CamelClassName;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class Create//CamelClassNameAction extends //CamelClassNameAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws InternalServerException
+     */
+    protected function action(): Response
+    {
+        $registerData = $this->getFormData();
+        $resource = new //CamelClassName(/**CreateAsPerDataEntry*/);
+        $resourceId = $this->//OriginalClassNameRepository->save($resource);
+        if (!$resourceId) {
+            throw new InternalServerException();
+        }
+        $resource->setId($resourceId);
+
+        $this->logger->info("//CamelClassName of id $resourceId was created.");
+
+        return $this->respondWithData($resource);
+    }
+}

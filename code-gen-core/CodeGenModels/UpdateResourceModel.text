@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Application\Actions\//CamelClassName;
+
+use App\Application\Exceptions\InternalServerException;
+use App\Domain\//CamelClassName\//CamelClassName;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class Update//CamelClassNameAction extends //CamelClassNameAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws InternalServerException
+     */
+    protected function action(): Response
+    {
+        $registerId = (int) $this->resolveArg('id');
+        $registerData = $this->getFormData();
+        $resource = new Task(/**CreateAsPerDataEntry*/);
+        $success = $this->//OriginalClassNameRepository->update($resource);
+        if (!$success) {
+            throw new InternalServerException();
+        }
+
+        $this->logger->info("//CamelClassName of id $registerId was updated.");
+
+        return $this->respondWithData(['success' => true]);
+    }
+}

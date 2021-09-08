@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Domain\//CamelClassName;
+
+interface //CamelClassNameRepository
+{
+    /**
+     * @param //CamelClassName $//OriginalClassName
+     * @return int|null
+     */
+    public function save(//CamelClassName $//OriginalClassName): ?int;
+
+    /**
+     * @return //CamelClassName[]
+     */
+    public function findAll(): array;
+
+    /**
+     * @param int $id
+     * @return //CamelClassName|null
+     */
+    public function find//CamelClassNameOfId(int $id): ?//CamelClassName;
+
+    /**
+     * @param //CamelClassName $//OriginalClassName
+     * @return bool
+     */
+    public function update(//CamelClassName $//OriginalClassName): bool;
+
+    /**
+     * @param int $id
+     * @return bool
+     */
+    public function delete(int $id): bool;
+}

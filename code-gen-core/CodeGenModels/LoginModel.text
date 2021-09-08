@@ -1,0 +1,37 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Application\Actions\Auth;
+
+
+use App\Application\Exceptions\Auth\AuthIncorrectCredentialsException;
+use App\Application\Exceptions\InternalServerException;
+use Psr\Http\Message\ResponseInterface as Response;
+
+class AuthUserAction extends AuthAction
+{
+    /**
+     * {@inheritdoc}
+     * @throws AuthIncorrectCredentialsException
+     * @throws InternalServerException
+     */
+    protected function action(): Response
+    {
+        $userAuthData = $this->getFormData();
+        $user = $this->userRepository->findUserOfEmailToAuth($userAuthData->email);
+
+        if (!$user || !password_verify($userAuthData->password, $user->getPassword())) {
+            throw new AuthIncorrectCredentialsException();
+        }
+
+        $token = $this->authTokenService->generate($user);
+        $success = $this->authTokenRepository->save($token);
+        if (!$success) {
+            throw new InternalServerException();
+        }
+
+        $this->logger->info("User of email" . $userAuthData->email . "was authenticated.");
+
+        return $this->respondWithData(['user' => $user, 'token' => $token->getToken()]);
+    }
+}

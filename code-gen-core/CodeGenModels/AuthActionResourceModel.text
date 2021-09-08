@@ -1,0 +1,46 @@
+<?php
+declare(strict_types=1);
+
+namespace App\Application\Actions\Auth;
+
+use App\Application\Actions\Action;
+use App\Domain\Auth\AuthTokenRepository;
+use App\Domain\Auth\AuthTokenService;
+use App\Domain\User\UserRepository;
+use Psr\Log\LoggerInterface;
+
+abstract class AuthAction extends Action
+{
+    /**
+     * @var AuthTokenRepository
+     */
+    protected $authTokenRepository;
+
+    /**
+     * @var AuthTokenService
+     */
+    protected $authTokenService;
+
+    /**
+     * @var UserRepository
+     */
+    protected $userRepository;
+
+    /**
+     * @param LoggerInterface $logger
+     * @param AuthTokenRepository $authTokenRepository
+     * @param AuthTokenService $authTokenService
+     * @param UserRepository $userRepository
+     */
+    public function __construct(LoggerInterface $logger,
+                                AuthTokenRepository $authTokenRepository,
+                                AuthTokenService $authTokenService,
+                                UserRepository $userRepository
+    )
+    {
+        parent::__construct($logger);
+        $this->authTokenRepository = $authTokenRepository;
+        $this->authTokenService = $authTokenService;
+        $this->userRepository = $userRepository;
+    }
+}
