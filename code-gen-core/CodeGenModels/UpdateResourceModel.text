@@ -16,7 +16,7 @@ class Update//CamelClassNameAction extends //CamelClassNameAction
     {
         $registerId = (int) $this->resolveArg('id');
         $registerData = $this->getFormData();
-        $resource = new Task(/**CreateAsPerDataEntry*/);
+        $resource = new Task(/**CreatePersonalizeDataEntry*/);
         $success = $this->//OriginalClassNameRepository->update($resource);
         if (!$success) {
             throw new InternalServerException();

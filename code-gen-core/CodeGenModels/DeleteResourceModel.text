@@ -16,7 +16,7 @@ class Delete//CamelClassNameAction extends //CamelClassNameAction
     {
         $registerId = (int) $this->resolveArg('id');
 
-        $success = $this->//OriginalClassNameRepository->delete($taskId);
+        $success = $this->//OriginalClassNameRepository->delete($registerId);
         if (!$success) {
             throw new InternalServerException();
         }

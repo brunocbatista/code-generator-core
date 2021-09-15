@@ -25,8 +25,5 @@ return function (ContainerBuilder $containerBuilder) {
 
             return $logger;
         },
-
-        // code-gen space
-
     ]);
 };

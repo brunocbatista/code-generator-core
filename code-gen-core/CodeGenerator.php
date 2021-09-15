@@ -14,6 +14,7 @@ class CodeGenerator extends Action
     private $docParamsToConstructor;
     private $setAttributesToConstructor;
     private $getAttributesToJsonSerialize;
+    private $contentToRouteFile;
 
     /**
      * {@inheritdoc}
@@ -34,7 +35,19 @@ class CodeGenerator extends Action
             $this->processPath($route, $body);
         }
 
-        return $this->respondWithData(null);
+        $this->processRouteFile();
+
+        return $this->respondWithData('Entrada processada com sucesso!');
+    }
+
+    private function processRouteFile(): void
+    {
+        $routeFileDir = __DIR__ . '\..\app\routes.php';
+        $routeFileContent = file_get_contents($routeFileDir);
+        $routeFileContent = str_replace('// code-gen space', $this->contentToRouteFile, $routeFileContent);
+        $file = fopen($routeFileDir, 'w');
+        fwrite($file, $routeFileContent);
+        fclose($file);
     }
 
     private function processDefinition($definitionKey, $definitionValue): void
@@ -47,15 +60,16 @@ class CodeGenerator extends Action
 
     private function processPath($route, $body)
     {
-
         switch ($route) {
             case '/login':
+                $this->makeRouteContent('post', '/login', '\App\Application\Actions\Auth\\AuthUserAction::class');
                 $this->makeBaseAuthActionFile();
                 $this->makeAuthActionFile('Login');
                 break;
             case '/register':
+                $this->makeRouteContent('post', '/register', '\App\Application\Actions\Auth\\RegisterUserAction::class');
                 $this->makeBaseAuthActionFile();
-                $this->makeBaseAuthActionFile('Register');
+                $this->makeAuthActionFile('Register');
                 break;
             default:
                 $explodedRoutes = explode('/', $route);
@@ -69,24 +83,43 @@ class CodeGenerator extends Action
                     switch ($key){
                         case 'get':
                             if ($lastIsIdDetail) {
-                                $this->makeActionFile('View', $camelClassName, $originalClassName);
+                                $method = 'View';
+                                $this->makeActionFile($method, $camelClassName, $originalClassName);
                             } else {
-                                $this->makeActionFile('List', $camelClassName, $originalClassName);
+                                $method = 'List';
+                                $this->makeActionFile($method, $camelClassName, $originalClassName);
                                 $this->makeNotFoundExceptionFile($camelClassName, $originalClassName);
                             }
                             break;
                         case 'post':
-                            $this->makeActionFile('Create', $camelClassName, $originalClassName);
+                            $method = 'Create';
+                            $this->makeActionFile($method, $camelClassName, $originalClassName);
                             break;
                         case 'put':
-                            $this->makeActionFile('Update', $camelClassName, $originalClassName);
+                            $method = 'Update';
+                            $this->makeActionFile($method, $camelClassName, $originalClassName);
                             break;
                         case 'delete':
-                            $this->makeActionFile('Delete', $camelClassName, $originalClassName);
+                            $method = 'Delete';
+                            $this->makeActionFile($method, $camelClassName, $originalClassName);
                             break;
                     }
+                    $this->makeRouteContent($key, $route, "\App\Application\Actions\\$camelClassName\\$method".$camelClassName."Action::class");
                 }
         }
+    }
+
+    private function makeRouteContent($method, $path, $className): void
+    {
+        if (!empty($this->contentToRouteFile)) {
+            $this->contentToRouteFile = $this->contentToRouteFile . "\n\n\t";
+        }
+        $modelFileDir = __DIR__ . '\..\code-gen-core\CodeGenModels\RouteModel.text';
+        $modelFileContent = file_get_contents($modelFileDir);
+        $modelFileContent = str_replace('//HttpMethod', $method, $modelFileContent);
+        $modelFileContent = str_replace('//Route', $path, $modelFileContent);
+        $modelFileContent = str_replace('//Class', $className, $modelFileContent);
+        $this->contentToRouteFile = $this->contentToRouteFile . $modelFileContent;
     }
 
     private function processDefinitionValueToAttributesDefinition($definitionValue): array
@@ -275,6 +308,25 @@ class CodeGenerator extends Action
             mkdir($fileDir);
         }
         $file = fopen($fileDir . "\\$action" . $camelClassName . 'Action.php', 'w');
+        fwrite($file, $modelFileContent);
+        fclose($file);
+    }
+
+    private function makeAuthActionFile($action)
+    {
+        $modelFileDir = __DIR__ . '\..\code-gen-core\CodeGenModels\\'.$action.'Model.text';
+        $modelFileContent = file_get_contents($modelFileDir);
+        if (empty($modelFileContent)) {
+            throw new InternalServerException();
+        }
+
+        $fileDir = __DIR__ . "\..\src\Application\Actions\Auth";
+
+        if (!file_exists($fileDir)) {
+            mkdir($fileDir);
+        }
+        $actionName = $action === 'Register' ? 'Register' : 'Auth';
+        $file = fopen($fileDir . "\\" . $actionName . 'UserAction.php', 'w');
         fwrite($file, $modelFileContent);
         fclose($file);
     }

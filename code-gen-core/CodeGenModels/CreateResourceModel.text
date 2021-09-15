@@ -15,7 +15,7 @@ class Create//CamelClassNameAction extends //CamelClassNameAction
     protected function action(): Response
     {
         $registerData = $this->getFormData();
-        $resource = new //CamelClassName(/**CreateAsPerDataEntry*/);
+        $resource = new //CamelClassName(/**CreatePersonalizeDataEntry*/);
         $resourceId = $this->//OriginalClassNameRepository->save($resource);
         if (!$resourceId) {
             throw new InternalServerException();

@@ -6,8 +6,6 @@ use DI\ContainerBuilder;
 return function (ContainerBuilder $containerBuilder) {
     // Here we map our UserRepository interface to its in memory implementation
     $containerBuilder->addDefinitions([
-
-        // code-gen space
-
+        AuthTokenService::class => \DI\autowire(FirebaseJWTAuthTokenService::class),
     ]);
 };
