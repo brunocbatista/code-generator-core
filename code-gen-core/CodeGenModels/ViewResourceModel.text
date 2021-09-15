@@ -5,7 +5,7 @@ namespace App\Application\Actions\//CamelClassName;
 use App\Application\Exceptions\//CamelClassName\//CamelClassNameNotFoundException;
 use Psr\Http\Message\ResponseInterface as Response;
 
-class View//CamelClassNameAction extends TaskAction
+class View//CamelClassNameAction extends //CamelClassNameAction
 {
     /**
      * {@inheritdoc}
